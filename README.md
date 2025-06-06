@@ -1,6 +1,6 @@
 # LiaiZen API
 
-A professional FastAPI application for iOS/Android apps with Auth0 authentication, PostgreSQL database, and Azure-ready deployment.
+A FastAPI application for iOS/Android apps with Auth0 authentication, PostgreSQL database, and Azure-ready deployment.
 
 ## 🚀 Quick Start
 
