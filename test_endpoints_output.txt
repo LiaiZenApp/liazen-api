@@ -1,0 +1,770 @@
+[0;34m[INFO][0m Starting LiaiZen API Tests
+[0;34m[INFO][0m Base URL: http://localhost:8000
+[1;33m[WARNING][0m Note: Some endpoints require authentication. Update SAMPLE_JWT_TOKEN with a real token after login.
+
+==========================================
+[0;34m[INFO][0m Testing: Root endpoint
+[0;34m[INFO][0m Method: GET
+[0;34m[INFO][0m URL: http://localhost:8000/
+==========================================\n
+{"message":"Welcome to LiaiZen API"}
+
+HTTP Status: 200
+Time: 0.002517s
+
+==========================================
+
+
+==========================================
+[0;34m[INFO][0m Testing: Health check endpoint
+[0;34m[INFO][0m Method: GET
+[0;34m[INFO][0m URL: http://localhost:8000/health
+==========================================\n
+{"status":"ok"}
+
+HTTP Status: 200
+Time: 0.002250s
+
+==========================================
+
+
+==========================================
+[0;34m[INFO][0m Testing: User login
+[0;34m[INFO][0m Method: POST
+[0;34m[INFO][0m URL: http://localhost:8000/api/auth/login
+[0;34m[INFO][0m Data: {
+    "username": "test@example.com",
+    "password": "testpassword123"
+}
+==========================================\n
+{"detail":"Invalid credentials or Auth0 failure"}
+
+HTTP Status: 401
+Time: 0.337677s
+
+==========================================
+
+
+==========================================
+[0;34m[INFO][0m Testing: Refresh token
+[0;34m[INFO][0m Method: POST
+[0;34m[INFO][0m URL: http://localhost:8000/api/auth/refresh
+[0;34m[INFO][0m Data: {"access_token": "sample_token", "refresh_token": "sample_refresh_token", "expires_in": 3600, "token_type": "Bearer"}
+==========================================\n
+{"detail":"Invalid refresh token"}
+
+HTTP Status: 401
+Time: 0.268035s
+
+==========================================
+
+
+==========================================
+[0;34m[INFO][0m Testing: Get all users
+[0;34m[INFO][0m Method: GET
+[0;34m[INFO][0m URL: http://localhost:8000/api/users
+==========================================\n
+[{"id":"ac5844ca-190d-4071-8587-fba72070fd43","email":"test@example.com","first_name":"Test","last_name":"User","is_active":true,"is_verified":false,"role":"user","hashed_password":"$2b$12$4kyfkg8GkCLeNksNPQxsFOqTvzAbxP7AVdcDIApmYBaeVCN7xpO.u","created_at":"2025-06-06T01:12:58.088822","updated_at":"2025-06-06T01:12:58.088824"}]
+
+HTTP Status: 200
+Time: 0.002355s
+
+==========================================
+
+
+==========================================
+[0;34m[INFO][0m Testing: Register new user
+[0;34m[INFO][0m Method: POST
+[0;34m[INFO][0m URL: http://localhost:8000/api/users/register
+[0;34m[INFO][0m Data: {
+    "email": "test@example.com",
+    "first_name": "Test",
+    "last_name": "User",
+    "password": "testpassword123",
+    "is_active": true,
+    "role": "user"
+}
+==========================================\n
+{"detail":"Email already registered"}
+
+HTTP Status: 400
+Time: 0.002405s
+
+==========================================
+
+
+==========================================
+[0;34m[INFO][0m Testing: Get user by ID
+[0;34m[INFO][0m Method: GET
+[0;34m[INFO][0m URL: http://localhost:8000/api/users/12345678-1234-5678-1234-567812345678
+==========================================\n
+{"detail":"User not found"}
+
+HTTP Status: 404
+Time: 0.001881s
+
+==========================================
+
+
+==========================================
+[0;34m[INFO][0m Testing: Update user profile
+[0;34m[INFO][0m Method: PUT
+[0;34m[INFO][0m URL: http://localhost:8000/api/users/12345678-1234-5678-1234-567812345678
+[0;34m[INFO][0m Data: {
+    "first_name": "Updated",
+    "last_name": "User",
+    "email": "updated@example.com"
+}
+==========================================\n
+{"detail":"User not found"}
+
+HTTP Status: 404
+Time: 0.002557s
+
+==========================================
+
+
+==========================================
+[0;34m[INFO][0m Testing: Update user password
+[0;34m[INFO][0m Method: PUT
+[0;34m[INFO][0m URL: http://localhost:8000/api/users/12345678-1234-5678-1234-567812345678/password
+[0;34m[INFO][0m Data: {
+    "username": "test@example.com",
+    "password": "newpassword123"
+}
+==========================================\n
+{"detail":"Failed to update password: 'UserCred' object has no attribute 'email'"}
+
+HTTP Status: 500
+Time: 0.002305s
+
+==========================================
+
+
+==========================================
+[0;34m[INFO][0m Testing: Delete user account
+[0;34m[INFO][0m Method: DELETE
+[0;34m[INFO][0m URL: http://localhost:8000/api/users/12345678-1234-5678-1234-567812345678
+==========================================\n
+{"detail":"User not found"}
+
+HTTP Status: 404
+Time: 0.001892s
+
+==========================================
+
+
+==========================================
+[0;34m[INFO][0m Testing: Register user device
+[0;34m[INFO][0m Method: POST
+[0;34m[INFO][0m URL: http://localhost:8000/api/users/devices/register
+[0;34m[INFO][0m Data: {
+    "user_id": "12345678-1234-5678-1234-567812345678",
+    "device_id": "sample-device-token",
+    "device_type": "ios",
+    "device_name": "iPhone 13",
+    "os_version": "15.4",
+    "app_version": "1.0.0"
+}
+==========================================\n
+{"detail":"User not found"}
+
+HTTP Status: 404
+Time: 0.002160s
+
+==========================================
+
+[1;33m[WARNING][0m Skipping profile image upload test - test_image.jpg not found
+
+==========================================
+[0;34m[INFO][0m Testing: Send chat message
+[0;34m[INFO][0m Method: POST
+[0;34m[INFO][0m URL: http://localhost:8000/api/chat/messages
+[0;34m[INFO][0m Data: {
+    "recipient_id": "87654321-4321-8765-4321-876543210987",
+    "content": "Hello, this is a test message!"
+}
+==========================================\n
+{"detail":"Not Found"}
+
+HTTP Status: 404
+Time: 0.002014s
+
+==========================================
+
+
+==========================================
+[0;34m[INFO][0m Testing: Get chat messages
+[0;34m[INFO][0m Method: GET
+[0;34m[INFO][0m URL: http://localhost:8000/api/chat/messages?recipient_id=87654321-4321-8765-4321-876543210987&limit=10&offset=0
+==========================================\n
+{"detail":"Not Found"}
+
+HTTP Status: 404
+Time: 0.001897s
+
+==========================================
+
+
+==========================================
+[0;34m[INFO][0m Testing: Create event
+[0;34m[INFO][0m Method: POST
+[0;34m[INFO][0m URL: http://localhost:8000/api/events
+[0;34m[INFO][0m Data: {
+    "title": "Test Event",
+    "description": "This is a test event",
+    "start_time": "2024-12-31T10:00:00",
+    "end_time": "2024-12-31T12:00:00",
+    "location": "Test Location",
+    "is_virtual": false,
+    "capacity": 50
+}
+==========================================\n
+{"detail":"Not Found"}
+
+HTTP Status: 404
+Time: 0.002201s
+
+==========================================
+
+
+==========================================
+[0;34m[INFO][0m Testing: Get user events
+[0;34m[INFO][0m Method: GET
+[0;34m[INFO][0m URL: http://localhost:8000/api/events/user/1
+==========================================\n
+{"detail":"Not Found"}
+
+HTTP Status: 404
+Time: 0.002137s
+
+==========================================
+
+
+==========================================
+[0;34m[INFO][0m Testing: Get user events with filters
+[0;34m[INFO][0m Method: GET
+[0;34m[INFO][0m URL: http://localhost:8000/api/events/user/1?search_text=test&time_zone=UTC
+==========================================\n
+{"detail":"Not Found"}
+
+HTTP Status: 404
+Time: 0.001981s
+
+==========================================
+
+
+==========================================
+[0;34m[INFO][0m Testing: Get event by ID
+[0;34m[INFO][0m Method: GET
+[0;34m[INFO][0m URL: http://localhost:8000/api/events/1
+==========================================\n
+{"detail":"Not Found"}
+
+HTTP Status: 404
+Time: 0.001854s
+
+==========================================
+
+
+==========================================
+[0;34m[INFO][0m Testing: Delete event
+[0;34m[INFO][0m Method: DELETE
+[0;34m[INFO][0m URL: http://localhost:8000/api/events/1
+==========================================\n
+{"detail":"Not Found"}
+
+HTTP Status: 404
+Time: 0.002270s
+
+==========================================
+
+
+==========================================
+[0;34m[INFO][0m Testing: Create connection
+[0;34m[INFO][0m Method: POST
+[0;34m[INFO][0m URL: http://localhost:8000/api/connections
+[0;34m[INFO][0m Data: {
+    "target_user_id": "87654321-4321-8765-4321-876543210987",
+    "status": "pending"
+}
+==========================================\n
+{"detail":"Connection already exists"}
+
+HTTP Status: 400
+Time: 0.002442s
+
+==========================================
+
+
+==========================================
+[0;34m[INFO][0m Testing: Get all connections
+[0;34m[INFO][0m Method: GET
+[0;34m[INFO][0m URL: http://localhost:8000/api/connections
+==========================================\n
+[{"id":"17a4205a-0910-4b0d-b649-d0dcdbb6c1d3","user_id":"797f2c21-dfeb-682d-d9e5-93343d7b8004","target_user_id":"87654321-4321-8765-4321-876543210987","status":"pending","created_at":"2025-06-06T01:12:58.321583","updated_at":"2025-06-06T01:12:58.321585"}]
+
+HTTP Status: 200
+Time: 0.002404s
+
+==========================================
+
+
+==========================================
+[0;34m[INFO][0m Testing: Get connections by status
+[0;34m[INFO][0m Method: GET
+[0;34m[INFO][0m URL: http://localhost:8000/api/connections?connection_status=pending
+==========================================\n
+[{"id":"17a4205a-0910-4b0d-b649-d0dcdbb6c1d3","user_id":"797f2c21-dfeb-682d-d9e5-93343d7b8004","target_user_id":"87654321-4321-8765-4321-876543210987","status":"pending","created_at":"2025-06-06T01:12:58.321583","updated_at":"2025-06-06T01:12:58.321585"}]
+
+HTTP Status: 200
+Time: 0.002292s
+
+==========================================
+
+
+==========================================
+[0;34m[INFO][0m Testing: Update connection status
+[0;34m[INFO][0m Method: PATCH
+[0;34m[INFO][0m URL: http://localhost:8000/api/connections/11111111-2222-3333-4444-555555555555?status=accepted
+==========================================\n
+{"detail":"Connection not found"}
+
+HTTP Status: 404
+Time: 0.002314s
+
+==========================================
+
+
+==========================================
+[0;34m[INFO][0m Testing: Delete connection
+[0;34m[INFO][0m Method: DELETE
+[0;34m[INFO][0m URL: http://localhost:8000/api/connections/11111111-2222-3333-4444-555555555555
+==========================================\n
+{"detail":"Connection not found"}
+
+HTTP Status: 404
+Time: 0.002267s
+
+==========================================
+
+
+==========================================
+[0;34m[INFO][0m Testing: Get member by user ID
+[0;34m[INFO][0m Method: GET
+[0;34m[INFO][0m URL: http://localhost:8000/api/members/12345678-1234-5678-1234-567812345678
+==========================================\n
+{"detail":"Not Found"}
+
+HTTP Status: 404
+Time: 0.002135s
+
+==========================================
+
+
+==========================================
+[0;34m[INFO][0m Testing: Get member by email
+[0;34m[INFO][0m Method: GET
+[0;34m[INFO][0m URL: http://localhost:8000/api/members/email/test@example.com
+==========================================\n
+{"detail":"Not Found"}
+
+HTTP Status: 404
+Time: 0.002388s
+
+==========================================
+
+
+==========================================
+[0;34m[INFO][0m Testing: Create member
+[0;34m[INFO][0m Method: POST
+[0;34m[INFO][0m URL: http://localhost:8000/api/members
+[0;34m[INFO][0m Data: {
+    "user_id": "12345678-1234-5678-1234-567812345678",
+    "first_name": "Test",
+    "last_name": "Member",
+    "email": "member@example.com",
+    "phone": "+1234567890"
+}
+==========================================\n
+{"detail":"Not Found"}
+
+HTTP Status: 404
+Time: 0.002090s
+
+==========================================
+
+
+==========================================
+[0;34m[INFO][0m Testing: Delete member
+[0;34m[INFO][0m Method: DELETE
+[0;34m[INFO][0m URL: http://localhost:8000/api/members/12345678-1234-5678-1234-567812345678
+==========================================\n
+{"detail":"Not Found"}
+
+HTTP Status: 404
+Time: 0.001969s
+
+==========================================
+
+
+==========================================
+[0;34m[INFO][0m Testing: Get relationships
+[0;34m[INFO][0m Method: GET
+[0;34m[INFO][0m URL: http://localhost:8000/api/members/relationships/list
+==========================================\n
+{"detail":"Not Found"}
+
+HTTP Status: 404
+Time: 0.001823s
+
+==========================================
+
+
+==========================================
+[0;34m[INFO][0m Testing: Invite member
+[0;34m[INFO][0m Method: POST
+[0;34m[INFO][0m URL: http://localhost:8000/api/members/invite
+[0;34m[INFO][0m Data: {
+    "email": "invite@example.com",
+    "first_name": "Invited",
+    "last_name": "Member",
+    "phone": "+1234567890",
+    "role": "member",
+    "send_invite": true
+}
+==========================================\n
+{"detail":"Not Found"}
+
+HTTP Status: 404
+Time: 0.001917s
+
+==========================================
+
+
+==========================================
+[0;34m[INFO][0m Testing: Get notifications
+[0;34m[INFO][0m Method: GET
+[0;34m[INFO][0m URL: http://localhost:8000/api/notifications
+==========================================\n
+{"detail":"Not Found"}
+
+HTTP Status: 404
+Time: 0.001868s
+
+==========================================
+
+
+==========================================
+[0;34m[INFO][0m Testing: Get unread notifications
+[0;34m[INFO][0m Method: GET
+[0;34m[INFO][0m URL: http://localhost:8000/api/notifications?skip=0&limit=10&unread_only=true
+==========================================\n
+{"detail":"Not Found"}
+
+HTTP Status: 404
+Time: 0.001865s
+
+==========================================
+
+
+==========================================
+[0;34m[INFO][0m Testing: Create notification
+[0;34m[INFO][0m Method: POST
+[0;34m[INFO][0m URL: http://localhost:8000/api/notifications
+[0;34m[INFO][0m Data: {
+    "title": "Test Notification",
+    "message": "This is a test notification",
+    "notification_type": "info"
+}
+==========================================\n
+{"detail":"Not Found"}
+
+HTTP Status: 404
+Time: 0.001787s
+
+==========================================
+
+
+==========================================
+[0;34m[INFO][0m Testing: Get notification by ID
+[0;34m[INFO][0m Method: GET
+[0;34m[INFO][0m URL: http://localhost:8000/api/notifications/66666666-7777-8888-9999-000000000000
+==========================================\n
+{"detail":"Not Found"}
+
+HTTP Status: 404
+Time: 0.001882s
+
+==========================================
+
+
+==========================================
+[0;34m[INFO][0m Testing: Mark notification as read
+[0;34m[INFO][0m Method: PUT
+[0;34m[INFO][0m URL: http://localhost:8000/api/notifications/66666666-7777-8888-9999-000000000000/read
+==========================================\n
+{"detail":"Not Found"}
+
+HTTP Status: 404
+Time: 0.001834s
+
+==========================================
+
+
+==========================================
+[0;34m[INFO][0m Testing: Mark all notifications as read
+[0;34m[INFO][0m Method: PUT
+[0;34m[INFO][0m URL: http://localhost:8000/api/notifications/read-all
+==========================================\n
+{"detail":"Not Found"}
+
+HTTP Status: 404
+Time: 0.001913s
+
+==========================================
+
+
+==========================================
+[0;34m[INFO][0m Testing: Delete notification
+[0;34m[INFO][0m Method: DELETE
+[0;34m[INFO][0m URL: http://localhost:8000/api/notifications/66666666-7777-8888-9999-000000000000
+==========================================\n
+{"detail":"Not Found"}
+
+HTTP Status: 404
+Time: 0.002212s
+
+==========================================
+
+
+==========================================
+[0;34m[INFO][0m Testing: Get my profile
+[0;34m[INFO][0m Method: GET
+[0;34m[INFO][0m URL: http://localhost:8000/api/profiles/me
+==========================================\n
+{"detail":"Profile not found. Please create a profile first."}
+
+HTTP Status: 404
+Time: 0.002267s
+
+==========================================
+
+
+==========================================
+[0;34m[INFO][0m Testing: Update my profile
+[0;34m[INFO][0m Method: PUT
+[0;34m[INFO][0m URL: http://localhost:8000/api/profiles/me
+[0;34m[INFO][0m Data: {
+    "bio": "Updated bio",
+    "location": "Updated City"
+}
+==========================================\n
+{"detail":"Profile not found. Please create a profile first."}
+
+HTTP Status: 404
+Time: 0.002722s
+
+==========================================
+
+
+==========================================
+[0;34m[INFO][0m Testing: Get user profile
+[0;34m[INFO][0m Method: GET
+[0;34m[INFO][0m URL: http://localhost:8000/api/profiles/12345678-1234-5678-1234-567812345678
+==========================================\n
+{"detail":"Profile not found"}
+
+HTTP Status: 404
+Time: 0.002316s
+
+==========================================
+
+
+==========================================
+[0;34m[INFO][0m Testing: Create profile
+[0;34m[INFO][0m Method: POST
+[0;34m[INFO][0m URL: http://localhost:8000/api/profiles
+[0;34m[INFO][0m Data: {
+    "user_id": "12345678-1234-5678-1234-567812345678",
+    "bio": "This is a test bio",
+    "location": "Test City",
+    "website": "https://example.com",
+    "birth_date": "1990-01-01",
+    "gender": "Other",
+    "phone_number": "+1234567890",
+    "preferred_language": "en",
+    "timezone": "UTC"
+}
+==========================================\n
+{"detail":"Cannot create a profile for another user"}
+
+HTTP Status: 403
+Time: 0.002426s
+
+==========================================
+
+[1;33m[WARNING][0m Skipping profile picture upload test - test_image.jpg not found
+
+==========================================
+[0;34m[INFO][0m Testing: Auth0 public endpoint
+[0;34m[INFO][0m Method: GET
+[0;34m[INFO][0m URL: http://localhost:8000/api/auth0-test/public
+==========================================\n
+{"message":"This is a public endpoint. No authentication required.","status":"success"}
+
+HTTP Status: 200
+Time: 0.002088s
+
+==========================================
+
+
+==========================================
+[0;34m[INFO][0m Testing: Auth0 protected endpoint
+[0;34m[INFO][0m Method: GET
+[0;34m[INFO][0m URL: http://localhost:8000/api/auth0-test/protected
+==========================================\n
+{"message":"You have accessed a protected endpoint!","user":{"id":"223e4567-e89b-12d3-a456-426614174001","email":"test@example.com","name":null,"picture":null},"status":"success"}
+
+HTTP Status: 200
+Time: 0.002311s
+
+==========================================
+
+
+==========================================
+[0;34m[INFO][0m Testing: Auth0 metadata
+[0;34m[INFO][0m Method: GET
+[0;34m[INFO][0m URL: http://localhost:8000/api/auth0-test/metadata
+==========================================\n
+{"auth0_domain":"dev-yyyhu3vod6suwtx4.us.auth0.com","auth0_audience":"https://dev-yyyhu3vod6suwtx4.us.auth0.com/api/v2/","auth0_issuer":"https://dev-yyyhu3vod6suwtx4.us.auth0.com/","auth0_jwks_uri":"https://dev-yyyhu3vod6suwtx4.us.auth0.com/.well-known/jwks.json","auth0_authorization_url":"https://dev-yyyhu3vod6suwtx4.us.auth0.com/authorize","auth0_token_url":"https://dev-yyyhu3vod6suwtx4.us.auth0.com/oauth/token","auth0_userinfo_url":"https://dev-yyyhu3vod6suwtx4.us.auth0.com/userinfo"}
+
+HTTP Status: 200
+Time: 0.002563s
+
+==========================================
+
+
+==========================================
+[0;34m[INFO][0m Testing: Get current user info
+[0;34m[INFO][0m Method: GET
+[0;34m[INFO][0m URL: http://localhost:8000/api/me
+==========================================\n
+{"detail":"Invalid token"}
+
+HTTP Status: 401
+Time: 0.001927s
+
+==========================================
+
+
+==========================================
+[0;34m[INFO][0m Testing: OpenAPI documentation (Swagger UI)
+[0;34m[INFO][0m Method: GET
+[0;34m[INFO][0m URL: http://localhost:8000/docs
+==========================================\n
+
+    <!DOCTYPE html>
+    <html>
+    <head>
+    <link type="text/css" rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swagger-ui-dist@5/swagger-ui.css">
+    <link rel="shortcut icon" href="https://fastapi.tiangolo.com/img/favicon.png">
+    <title>LiaiZen API - Swagger UI</title>
+    </head>
+    <body>
+    <div id="swagger-ui">
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/swagger-ui-dist@5/swagger-ui-bundle.js"></script>
+    <!-- `SwaggerUIBundle` is now available on the page -->
+    <script>
+    const ui = SwaggerUIBundle({
+        url: '/openapi.json',
+    "dom_id": "#swagger-ui",
+"layout": "BaseLayout",
+"deepLinking": true,
+"showExtensions": true,
+"showCommonExtensions": true,
+oauth2RedirectUrl: window.location.origin + '/docs/oauth2-redirect',
+    presets: [
+        SwaggerUIBundle.presets.apis,
+        SwaggerUIBundle.SwaggerUIStandalonePreset
+        ],
+    })
+    </script>
+    </body>
+    </html>
+    
+
+HTTP Status: 200
+Time: 0.001896s
+
+==========================================
+
+
+==========================================
+[0;34m[INFO][0m Testing: ReDoc documentation
+[0;34m[INFO][0m Method: GET
+[0;34m[INFO][0m URL: http://localhost:8000/redoc
+==========================================\n
+
+    <!DOCTYPE html>
+    <html>
+    <head>
+    <title>LiaiZen API - ReDoc</title>
+    <!-- needed for adaptive design -->
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    
+    <link href="https://fonts.googleapis.com/css?family=Montserrat:300,400,700|Roboto:300,400,700" rel="stylesheet">
+    
+    <link rel="shortcut icon" href="https://fastapi.tiangolo.com/img/favicon.png">
+    <!--
+    ReDoc doesn't change outer page styles
+    -->
+    <style>
+      body {
+        margin: 0;
+        padding: 0;
+      }
+    </style>
+    </head>
+    <body>
+    <noscript>
+        ReDoc requires Javascript to function. Please enable it to browse the documentation.
+    </noscript>
+    <redoc spec-url="/openapi.json"></redoc>
+    <script src="https://cdn.jsdelivr.net/npm/redoc@next/bundles/redoc.standalone.js"> </script>
+    </body>
+    </html>
+    
+
+HTTP Status: 200
+Time: 0.001811s
+
+==========================================
+
+
+==========================================
+[0;34m[INFO][0m Testing: OpenAPI JSON schema
+[0;34m[INFO][0m Method: GET
+[0;34m[INFO][0m URL: http://localhost:8000/openapi.json
+==========================================\n
+{"openapi":"3.1.0","info":{"title":"LiaiZen API","description":"Professional API for iOS/Android apps with FastAPI, Auth0, PostgreSQL, and Azure-ready setup.","version":"1.0"},"paths":{"/api/auth/login":{"post":{"tags":["Auth"],"summary":"Login","description":"Authenticates a user and returns an access & refresh token pair.","operationId":"login_api_auth_login_post","requestBody":{"content":{"application/json":{"schema":{"$ref":"#/components/schemas/UserCred"}}},"required":true},"responses":{"200":{"description":"Successful Response","content":{"application/json":{"schema":{"$ref":"#/components/schemas/TokenResponse"}}}},"422":{"description":"Validation Error","content":{"application/json":{"schema":{"$ref":"#/components/schemas/HTTPValidationError"}}}}}}},"/api/auth/refresh":{"post":{"tags":["Auth"],"summary":"Refresh","description":"Refreshes JWT tokens using a valid refresh token.","operationId":"refresh_api_auth_refresh_post","requestBody":{"content":{"application/json":{"schema":{"$ref":"#/components/schemas/TokenResponse"}}},"required":true},"responses":{"200":{"description":"Successful Response","content":{"application/json":{"schema":{"$ref":"#/components/schemas/TokenResponse"}}}},"422":{"description":"Validation Error","content":{"application/json":{"schema":{"$ref":"#/components/schemas/HTTPValidationError"}}}}}}},"/api/chat/api/chat/messages":{"post":{"tags":["Chat","chat"],"summary":"Send Message","description":"Send a chat message\n\nArgs:\n    message: The message to send\n    current_user: The authenticated user\n    \nReturns:\n    MessageDTO: The sent message","operationId":"send_message_api_chat_api_chat_messages_post","security":[{"OAuth2PasswordBearer":[]}],"requestBody":{"required":true,"content":{"application/json":{"schema":{"$ref":"#/components/schemas/MessageRequest"}}}},"responses":{"201":{"description":"Successful Response","content":{"application/json":{"schema":{"$ref":"#/components/schemas/MessageDTO"}}}},"422":{"description":"Validation Error","content":{"application/json":{"schema":{"$ref":"#/components/schemas/HTTPValidationError"}}}}}},"get":{"tags":["Chat","chat"],"summary":"Get Messages","description":"Get messages between the current user and another user\n\nArgs:\n    recipient_id: ID of the other user\n    limit: Maximum number of messages to return (1-100)\n    offset: Number of messages to skip\n    current_user: The authenticated user\n    \nReturns:\n    List[MessageDTO]: List of messages","operationId":"get_messages_api_chat_api_chat_messages_get","security":[{"OAuth2PasswordBearer":[]}],"parameters":[{"name":"recipient_id","in":"query","required":true,"schema":{"type":"string","description":"ID of the user to get messages with","title":"Recipient Id"},"description":"ID of the user to get messages with"},{"name":"limit","in":"query","required":false,"schema":{"type":"integer","maximum":100,"minimum":1,"description":"Maximum number of messages to return","default":50,"title":"Limit"},"description":"Maximum number of messages to return"},{"name":"offset","in":"query","required":false,"schema":{"type":"integer","minimum":0,"description":"Number of messages to skip","default":0,"title":"Offset"},"description":"Number of messages to skip"}],"responses":{"200":{"description":"Successful Response","content":{"application/json":{"schema":{"type":"array","items":{"$ref":"#/components/schemas/MessageDTO"},"title":"Response Get Messages Api Chat Api Chat Messages Get"}}}},"422":{"description":"Validation Error","content":{"application/json":{"schema":{"$ref":"#/components/schemas/HTTPValidationError"}}}}}}},"/api/events/api/events":{"post":{"tags":["Events","Events"],"summary":"Create Event Endpoint","description":"Create a new event.\n\n- **event**: Event data to create\n- **token**: JWT token for authentication","operationId":"create_event_endpoint_api_events_api_events_post","requestBody":{"content":{"application/json":{"schema":{"$ref":"#/components/schemas/EventCreate"}}},"required":true},"responses":{"201":{"description":"Successful Response","content":{"application/json":{"schema":{"additionalProperties":true,"type":"object","title":"Response Create Event Endpoint Api Events Api Events Post"}}}},"422":{"description":"Validation Error","content":{"application/json":{"schema":{"$ref":"#/components/schemas/HTTPValidationError"}}}}},"security":[{"HTTPBearer":[]}]}},"/api/events/api/events/user/{user_id}":{"get":{"tags":["Events","Events"],"summary":"Get User Events","description":"Get events for a specific user with optional filtering.\n\n- **user_id**: ID of the user\n- **search_text**: Optional text to search in event titles/descriptions\n- **time_zone**: Optional timezone for time conversion\n- **token**: JWT token for authentication","operationId":"get_user_events_api_events_api_events_user__user_id__get","security":[{"HTTPBearer":[]}],"parameters":[{"name":"user_id","in":"path","required":true,"schema":{"type":"integer","description":"ID of the user to fetch events for","title":"User Id"},"description":"ID of the user to fetch events for"},{"name":"search_text","in":"query","required":false,"schema":{"anyOf":[{"type":"string"},{"type":"null"}],"description":"Optional search text to filter events","title":"Search Text"},"description":"Optional search text to filter events"},{"name":"time_zone","in":"query","required":false,"schema":{"anyOf":[{"type":"string"},{"type":"null"}],"description":"Optional timezone for time conversion","title":"Time Zone"},"description":"Optional timezone for time conversion"}],"responses":{"200":{"description":"Successful Response","content":{"application/json":{"schema":{"type":"object","additionalProperties":true,"title":"Response Get User Events Api Events Api Events User  User Id  Get"}}}},"422":{"description":"Validation Error","content":{"application/json":{"schema":{"$ref":"#/components/schemas/HTTPValidationError"}}}}}}},"/api/events/api/events/{event_id}":{"get":{"tags":["Events","Events"],"summary":"Get Event","description":"Get a specific event by its ID.\n\n- **event_id**: ID of the event to retrieve\n- **token**: JWT token for authentication","operationId":"get_event_api_events_api_events__event_id__get","security":[{"HTTPBearer":[]}],"parameters":[{"name":"event_id","in":"path","required":true,"schema":{"type":"integer","description":"ID of the event to retrieve","title":"Event Id"},"description":"ID of the event to retrieve"}],"responses":{"200":{"description":"Successful Response","content":{"application/json":{"schema":{"type":"object","additionalProperties":true,"title":"Response Get Event Api Events Api Events  Event Id  Get"}}}},"422":{"description":"Validation Error","content":{"application/json":{"schema":{"$ref":"#/components/schemas/HTTPValidationError"}}}}}},"delete":{"tags":["Events","Events"],"summary":"Delete Event Endpoint","description":"Delete an event by its ID.\n\n- **event_id**: ID of the event to delete\n- **token**: JWT token for authentication","operationId":"delete_event_endpoint_api_events_api_events__event_id__delete","security":[{"HTTPBearer":[]}],"parameters":[{"name":"event_id","in":"path","required":true,"schema":{"type":"integer","description":"ID of the event to delete","title":"Event Id"},"description":"ID of the event to delete"}],"responses":{"204":{"description":"Successful Response"},"422":{"description":"Validation Error","content":{"application/json":{"schema":{"$ref":"#/components/schemas/HTTPValidationError"}}}}}}},"/api/users":{"get":{"tags":["Users","Users"],"summary":"List Users","description":"Get all users.\n\nReturns:\n    List of User objects","operationId":"list_users_api_users_get","responses":{"200":{"description":"Successful Response","content":{"application/json":{"schema":{"items":{"$ref":"#/components/schemas/User"},"type":"array","title":"Response List Users Api Users Get"}}}}}}},"/api/users/{user_id}":{"get":{"tags":["Users","Users"],"summary":"Get User","description":"Get a user by ID.\n\nArgs:\n    user_id: UUID of the user to retrieve\n    \nReturns:\n    User object if found","operationId":"get_user_api_users__user_id__get","parameters":[{"name":"user_id","in":"path","required":true,"schema":{"type":"string","format":"uuid","title":"User Id"}}],"responses":{"200":{"description":"Successful Response","content":{"application/json":{"schema":{"$ref":"#/components/schemas/User"}}}},"422":{"description":"Validation Error","content":{"application/json":{"schema":{"$ref":"#/components/schemas/HTTPValidationError"}}}}}},"put":{"tags":["Users","Users"],"summary":"Update User Profile","description":"Update a user's profile information.\n\nArgs:\n    user_id: UUID of the user to update\n    user_update: Fields to update\n    token: JWT token for authentication\n    \nReturns:\n    Updated User object","operationId":"update_user_profile_api_users__user_id__put","security":[{"HTTPBearer":[]}],"parameters":[{"name":"user_id","in":"path","required":true,"schema":{"type":"string","format":"uuid","title":"User Id"}}],"requestBody":{"required":true,"content":{"application/json":{"schema":{"$ref":"#/components/schemas/UserUpdate"}}}},"responses":{"200":{"description":"Successful Response","content":{"application/json":{"schema":{"$ref":"#/components/schemas/User"}}}},"422":{"description":"Validation Error","content":{"application/json":{"schema":{"$ref":"#/components/schemas/HTTPValidationError"}}}}}},"delete":{"tags":["Users","Users"],"summary":"Delete User Account","description":"Delete a user account.\n\nArgs:\n    user_id: UUID of the user to delete\n    token: JWT token for authentication","operationId":"delete_user_account_api_users__user_id__delete","security":[{"HTTPBearer":[]}],"parameters":[{"name":"user_id","in":"path","required":true,"schema":{"type":"string","format":"uuid","title":"User Id"}}],"responses":{"204":{"description":"Successful Response"},"422":{"description":"Validation Error","content":{"application/json":{"schema":{"$ref":"#/components/schemas/HTTPValidationError"}}}}}}},"/api/users/register":{"post":{"tags":["Users","Users"],"summary":"Register","description":"Register a new user.\n\nArgs:\n    user: User creation data\n    \nReturns:\n    Newly created User object","operationId":"register_api_users_register_post","requestBody":{"content":{"application/json":{"schema":{"$ref":"#/components/schemas/UserCreate"}}},"required":true},"responses":{"201":{"description":"Successful Response","content":{"application/json":{"schema":{"$ref":"#/components/schemas/User"}}}},"422":{"description":"Validation Error","content":{"application/json":{"schema":{"$ref":"#/components/schemas/HTTPValidationError"}}}}}}},"/api/users/{user_id}/password":{"put":{"tags":["Users","Users"],"summary":"Update Password","description":"Update a user's password.\n\nArgs:\n    user_id: UUID of the user\n    creds: Current and new password\n    token: JWT token for authentication\n    \nReturns:\n    Success message","operationId":"update_password_api_users__user_id__password_put","security":[{"HTTPBearer":[]}],"parameters":[{"name":"user_id","in":"path","required":true,"schema":{"type":"string","format":"uuid","title":"User Id"}}],"requestBody":{"required":true,"content":{"application/json":{"schema":{"$ref":"#/components/schemas/UserCred"}}}},"responses":{"200":{"description":"Successful Response","content":{"application/json":{"schema":{}}}},"422":{"description":"Validation Error","content":{"application/json":{"schema":{"$ref":"#/components/schemas/HTTPValidationError"}}}}}}},"/api/users/{user_id}/profile-image":{"post":{"tags":["Users","Users"],"summary":"Upload Profile Image","description":"Upload a profile image for a user.\n\nArgs:\n    user_id: UUID of the user\n    file: Image file to upload\n    token: JWT token for authentication\n    \nReturns:\n    Upload status and file path","operationId":"upload_profile_image_api_users__user_id__profile_image_post","security":[{"HTTPBearer":[]}],"parameters":[{"name":"user_id","in":"path","required":true,"schema":{"type":"string","format":"uuid","title":"User Id"}}],"requestBody":{"required":true,"content":{"multipart/form-data":{"schema":{"$ref":"#/components/schemas/Body_upload_profile_image_api_users__user_id__profile_image_post"}}}},"responses":{"200":{"description":"Successful Response","content":{"application/json":{"schema":{}}}},"422":{"description":"Validation Error","content":{"application/json":{"schema":{"$ref":"#/components/schemas/HTTPValidationError"}}}}}}},"/api/users/devices/register":{"post":{"tags":["Users","Users"],"summary":"Register Device","description":"Register a user's device for push notifications.\n\nArgs:\n    device: Device information\n    token: JWT token for authentication\n    \nReturns:\n    Registration status and device ID","operationId":"register_device_api_users_devices_register_post","requestBody":{"content":{"application/json":{"schema":{"$ref":"#/components/schemas/UserDeviceDTO"}}},"required":true},"responses":{"201":{"description":"Successful Response","content":{"application/json":{"schema":{}}}},"422":{"description":"Validation Error","content":{"application/json":{"schema":{"$ref":"#/components/schemas/HTTPValidationError"}}}}},"security":[{"HTTPBearer":[]}]}},"/api/members/api/members/{user_id}":{"get":{"tags":["Members","Members"],"summary":"Get Member By User Id","operationId":"get_member_by_user_id_api_members_api_members__user_id__get","security":[{"HTTPBearer":[]}],"parameters":[{"name":"user_id","in":"path","required":true,"schema":{"type":"string","description":"User ID as UUID string","title":"User Id"},"description":"User ID as UUID string"}],"responses":{"200":{"description":"Successful Response","content":{"application/json":{"schema":{}}}},"422":{"description":"Validation Error","content":{"application/json":{"schema":{"$ref":"#/components/schemas/HTTPValidationError"}}}}}},"delete":{"tags":["Members","Members"],"summary":"Delete","operationId":"delete_api_members_api_members__user_id__delete","security":[{"HTTPBearer":[]}],"parameters":[{"name":"user_id","in":"path","required":true,"schema":{"type":"string","description":"User ID as UUID string","title":"User Id"},"description":"User ID as UUID string"}],"responses":{"200":{"description":"Successful Response","content":{"application/json":{"schema":{}}}},"422":{"description":"Validation Error","content":{"application/json":{"schema":{"$ref":"#/components/schemas/HTTPValidationError"}}}}}}},"/api/members/api/members/email/{email}":{"get":{"tags":["Members","Members"],"summary":"Get By Email","operationId":"get_by_email_api_members_api_members_email__email__get","security":[{"HTTPBearer":[]}],"parameters":[{"name":"email","in":"path","required":true,"schema":{"type":"string","description":"Email address of the member","title":"Email"},"description":"Email address of the member"}],"responses":{"200":{"description":"Successful Response","content":{"application/json":{"schema":{}}}},"422":{"description":"Validation Error","content":{"application/json":{"schema":{"$ref":"#/components/schemas/HTTPValidationError"}}}}}}},"/api/members/api/members":{"post":{"tags":["Members","Members"],"summary":"Create","operationId":"create_api_members_api_members_post","requestBody":{"content":{"application/json":{"schema":{"$ref":"#/components/schemas/MemberDTO"}}},"required":true},"responses":{"201":{"description":"Successful Response","content":{"application/json":{"schema":{}}}},"422":{"description":"Validation Error","content":{"application/json":{"schema":{"$ref":"#/components/schemas/HTTPValidationError"}}}}},"security":[{"HTTPBearer":[]}]}},"/api/members/api/members/relationships/list":{"get":{"tags":["Members","Members"],"summary":"Relationships","operationId":"relationships_api_members_api_members_relationships_list_get","responses":{"200":{"description":"Successful Response","content":{"application/json":{"schema":{}}}}},"security":[{"HTTPBearer":[]}]}},"/api/members/api/members/invite":{"post":{"tags":["Members","Members"],"summary":"Invite","operationId":"invite_api_members_api_members_invite_post","requestBody":{"content":{"application/json":{"schema":{"$ref":"#/components/schemas/UserMemberDto"}}},"required":true},"responses":{"202":{"description":"Successful Response","content":{"application/json":{"schema":{}}}},"422":{"description":"Validation Error","content":{"application/json":{"schema":{"$ref":"#/components/schemas/HTTPValidationError"}}}}},"security":[{"HTTPBearer":[]}]}},"/api/connections":{"post":{"tags":["Connections","Connections"],"summary":"Create Connection","description":"Create a new connection between the current user and another user\n\nArgs:\n    connection_data: Connection creation data\n    current_user: The authenticated user\n    \nReturns:\n    The created connection details\n    \nRaises:\n    HTTPException: With appropriate status code and detail message","operationId":"create_connection_api_connections_post","security":[{"HTTPBearer":[]}],"requestBody":{"required":true,"content":{"application/json":{"schema":{"$ref":"#/components/schemas/ConnectionCreate"}}}},"responses":{"201":{"description":"Successful Response","content":{"application/json":{"schema":{"$ref":"#/components/schemas/ConnectionDTO"}}}},"422":{"description":"Validation Error","content":{"application/json":{"schema":{"$ref":"#/components/schemas/HTTPValidationError"}}}}}},"get":{"tags":["Connections","Connections"],"summary":"Get Connections","description":"Get all connections for the current user\n\nArgs:\n    connection_status: Optional status filter (e.g., 'pending', 'accepted', 'rejected')\n    current_user: The authenticated user\n    \nReturns:\n    List[ConnectionDTO]: List of connections","operationId":"get_connections_api_connections_get","security":[{"HTTPBearer":[]}],"parameters":[{"name":"connection_status","in":"query","required":false,"schema":{"type":"string","title":"Connection Status"}}],"responses":{"200":{"description":"Successful Response","content":{"application/json":{"schema":{"type":"array","items":{"$ref":"#/components/schemas/ConnectionDTO"},"title":"Response Get Connections Api Connections Get"}}}},"422":{"description":"Validation Error","content":{"application/json":{"schema":{"$ref":"#/components/schemas/HTTPValidationError"}}}}}}},"/api/connections/{connection_id}":{"patch":{"tags":["Connections","Connections"],"summary":"Update Connection","description":"Update the status of a connection\n\nArgs:\n    connection_id: ID of the connection to update\n    new_status: New status (e.g., 'accepted', 'rejected')\n    current_user: The authenticated user\n    \nReturns:\n    ConnectionDTO: Updated connection","operationId":"update_connection_api_connections__connection_id__patch","security":[{"HTTPBearer":[]}],"parameters":[{"name":"connection_id","in":"path","required":true,"schema":{"type":"string","title":"Connection Id"}},{"name":"status","in":"query","required":true,"schema":{"type":"string","title":"Status"}}],"responses":{"200":{"description":"Successful Response","content":{"application/json":{"schema":{"$ref":"#/components/schemas/ConnectionDTO"}}}},"422":{"description":"Validation Error","content":{"application/json":{"schema":{"$ref":"#/components/schemas/HTTPValidationError"}}}}}},"delete":{"tags":["Connections","Connections"],"summary":"Delete Connection","description":"Delete a connection\n\nArgs:\n    connection_id: ID of the connection to delete\n    current_user: The authenticated user (injected dependency)\n    \nReturns:\n    Dict with a success message\n    \nRaises:\n    HTTPException: With appropriate status code and detail message","operationId":"delete_connection_api_connections__connection_id__delete","security":[{"HTTPBearer":[]}],"parameters":[{"name":"connection_id","in":"path","required":true,"schema":{"type":"string","title":"Connection Id"}}],"responses":{"200":{"description":"Successful Response","content":{"application/json":{"schema":{}}}},"422":{"description":"Validation Error","content":{"application/json":{"schema":{"$ref":"#/components/schemas/HTTPValidationError"}}}}}}},"/api/notification/api/notifications":{"get":{"tags":["Notification","Notifications"],"summary":"Get Notifications","description":"Get a list of notifications for the current user\n\nArgs:\n    skip: Number of records to skip\n    limit: Maximum number of records to return\n    unread_only: Whether to return only unread notifications\n    current_user: The authenticated user (injected dependency)\n    \nReturns:\n    List of notifications","operationId":"get_notifications_api_notification_api_notifications_get","security":[{"HTTPBearer":[]}],"parameters":[{"name":"skip","in":"query","required":false,"schema":{"type":"integer","minimum":0,"description":"Number of records to skip","default":0,"title":"Skip"},"description":"Number of records to skip"},{"name":"limit","in":"query","required":false,"schema":{"type":"integer","maximum":100,"minimum":1,"description":"Maximum number of records to return","default":10,"title":"Limit"},"description":"Maximum number of records to return"},{"name":"unread_only","in":"query","required":false,"schema":{"type":"boolean","description":"Return only unread notifications","default":false,"title":"Unread Only"},"description":"Return only unread notifications"}],"responses":{"200":{"description":"Successful Response","content":{"application/json":{"schema":{"type":"array","items":{"$ref":"#/components/schemas/NotificationDTO"},"title":"Response Get Notifications Api Notification Api Notifications Get"}}}},"422":{"description":"Validation Error","content":{"application/json":{"schema":{"$ref":"#/components/schemas/HTTPValidationError"}}}}}},"post":{"tags":["Notification","Notifications"],"summary":"Create Notification","description":"Create a new notification\n\nArgs:\n    notification_data: Notification data\n    current_user: The authenticated user (injected dependency)\n    \nReturns:\n    The created notification","operationId":"create_notification_api_notification_api_notifications_post","security":[{"HTTPBearer":[]}],"requestBody":{"required":true,"content":{"application/json":{"schema":{"type":"object","additionalProperties":true,"title":"Notification Data"}}}},"responses":{"201":{"description":"Successful Response","content":{"application/json":{"schema":{"$ref":"#/components/schemas/NotificationDTO"}}}},"422":{"description":"Validation Error","content":{"application/json":{"schema":{"$ref":"#/components/schemas/HTTPValidationError"}}}}}}},"/api/notification/api/notifications/{notification_id}":{"get":{"tags":["Notification","Notifications"],"summary":"Get Notification","description":"Get a specific notification by ID\n\nArgs:\n    notification_id: ID of the notification to retrieve\n    current_user: The authenticated user (injected dependency)\n    \nReturns:\n    The requested notification\n    \nRaises:\n    HTTPException: If the notification is not found or not accessible","operationId":"get_notification_api_notification_api_notifications__notification_id__get","security":[{"HTTPBearer":[]}],"parameters":[{"name":"notification_id","in":"path","required":true,"schema":{"type":"string","format":"uuid","title":"Notification Id"}}],"responses":{"200":{"description":"Successful Response","content":{"application/json":{"schema":{"$ref":"#/components/schemas/NotificationDTO"}}}},"422":{"description":"Validation Error","content":{"application/json":{"schema":{"$ref":"#/components/schemas/HTTPValidationError"}}}}}},"delete":{"tags":["Notification","Notifications"],"summary":"Delete Notification","description":"Delete a notification\n\nArgs:\n    notification_id: ID of the notification to delete\n    current_user: The authenticated user (injected dependency)","operationId":"delete_notification_api_notification_api_notifications__notification_id__delete","security":[{"HTTPBearer":[]}],"parameters":[{"name":"notification_id","in":"path","required":true,"schema":{"type":"string","format":"uuid","title":"Notification Id"}}],"responses":{"204":{"description":"Successful Response"},"422":{"description":"Validation Error","content":{"application/json":{"schema":{"$ref":"#/components/schemas/HTTPValidationError"}}}}}}},"/api/notification/api/notifications/{notification_id}/read":{"put":{"tags":["Notification","Notifications"],"summary":"Mark Notification As Read","description":"Mark a notification as read\n\nArgs:\n    notification_id: ID of the notification to mark as read\n    current_user: The authenticated user (injected dependency)\n    \nReturns:\n    The updated notification","operationId":"mark_notification_as_read_api_notification_api_notifications__notification_id__read_put","security":[{"HTTPBearer":[]}],"parameters":[{"name":"notification_id","in":"path","required":true,"schema":{"type":"string","format":"uuid","title":"Notification Id"}}],"responses":{"200":{"description":"Successful Response","content":{"application/json":{"schema":{"$ref":"#/components/schemas/NotificationDTO"}}}},"422":{"description":"Validation Error","content":{"application/json":{"schema":{"$ref":"#/components/schemas/HTTPValidationError"}}}}}}},"/api/notification/api/notifications/read-all":{"put":{"tags":["Notification","Notifications"],"summary":"Mark All Notifications As Read","description":"Mark all notifications as read for the current user\n\nArgs:\n    current_user: The authenticated user (injected dependency)\n    \nReturns:\n    Success message","operationId":"mark_all_notifications_as_read_api_notification_api_notifications_read_all_put","responses":{"200":{"description":"Successful Response","content":{"application/json":{"schema":{}}}}},"security":[{"HTTPBearer":[]}]}},"/api/profiles/me":{"get":{"tags":["Profiles","Profiles"],"summary":"Get My Profile","description":"Get the current user's profile\n\nArgs:\n    current_user: The authenticated user (injected dependency)\n    \nReturns:\n    The user's profile\n    \nRaises:\n    HTTPException: If the profile is not found","operationId":"get_my_profile_api_profiles_me_get","responses":{"200":{"description":"Successful Response","content":{"application/json":{"schema":{"$ref":"#/components/schemas/ProfileResponse"}}}}},"security":[{"HTTPBearer":[]}]},"put":{"tags":["Profiles","Profiles"],"summary":"Update My Profile","description":"Update the current user's profile\n\nArgs:\n    profile_data: The updated profile data\n    current_user: The authenticated user (injected dependency)\n    \nReturns:\n    The updated profile\n    \nRaises:\n    HTTPException: If the profile is not found or update fails","operationId":"update_my_profile_api_profiles_me_put","requestBody":{"content":{"application/json":{"schema":{"$ref":"#/components/schemas/ProfileUpdate"}}},"required":true},"responses":{"200":{"description":"Successful Response","content":{"application/json":{"schema":{"$ref":"#/components/schemas/ProfileResponse"}}}},"422":{"description":"Validation Error","content":{"application/json":{"schema":{"$ref":"#/components/schemas/HTTPValidationError"}}}}},"security":[{"HTTPBearer":[]}]}},"/api/profiles/me/picture":{"post":{"tags":["Profiles","Profiles"],"summary":"Upload My Profile Picture","description":"Upload a profile picture for the current user\n\nArgs:\n    file: The image file to upload\n    current_user: The authenticated user (injected dependency)\n    \nReturns:\n    Dictionary containing the URL of the uploaded image\n    \nRaises:\n    HTTPException: If upload fails or user not authorized","operationId":"upload_my_profile_picture_api_profiles_me_picture_post","requestBody":{"content":{"multipart/form-data":{"schema":{"$ref":"#/components/schemas/Body_upload_my_profile_picture_api_profiles_me_picture_post"}}},"required":true},"responses":{"200":{"description":"Successful Response","content":{"application/json":{"schema":{}}}},"422":{"description":"Validation Error","content":{"application/json":{"schema":{"$ref":"#/components/schemas/HTTPValidationError"}}}}},"security":[{"HTTPBearer":[]}]}},"/api/profiles/{user_id}":{"get":{"tags":["Profiles","Profiles"],"summary":"Get User Profile","description":"Get a user's public profile\n\nArgs:\n    user_id: ID of the user whose profile to retrieve\n    current_user: The authenticated user (injected dependency)\n    \nReturns:\n    The requested user's public profile\n    \nRaises:\n    HTTPException: If the profile is not found or access is denied","operationId":"get_user_profile_api_profiles__user_id__get","security":[{"HTTPBearer":[]}],"parameters":[{"name":"user_id","in":"path","required":true,"schema":{"type":"string","format":"uuid","title":"User Id"}}],"responses":{"200":{"description":"Successful Response","content":{"application/json":{"schema":{"$ref":"#/components/schemas/ProfileResponse"}}}},"422":{"description":"Validation Error","content":{"application/json":{"schema":{"$ref":"#/components/schemas/HTTPValidationError"}}}}}}},"/api/profiles":{"post":{"tags":["Profiles","Profiles"],"summary":"Create User Profile","description":"Create a new profile for the current user\n\nArgs:\n    profile_data: The profile data\n    current_user: The authenticated user (injected dependency)\n    \nReturns:\n    The created profile\n    \nRaises:\n    HTTPException: If a profile already exists or creation fails","operationId":"create_user_profile_api_profiles_post","requestBody":{"content":{"application/json":{"schema":{"$ref":"#/components/schemas/ProfileCreate"}}},"required":true},"responses":{"201":{"description":"Successful Response","content":{"application/json":{"schema":{"$ref":"#/components/schemas/ProfileResponse"}}}},"422":{"description":"Validation Error","content":{"application/json":{"schema":{"$ref":"#/components/schemas/HTTPValidationError"}}}}},"security":[{"HTTPBearer":[]}]}},"/api/auth0-test/public":{"get":{"tags":["Auth0 Test","Auth0 Test"],"summary":"Public Endpoint","description":"Public endpoint that doesn't require authentication","operationId":"public_endpoint_api_auth0_test_public_get","responses":{"200":{"description":"Successful Response","content":{"application/json":{"schema":{}}}}}}},"/api/auth0-test/protected":{"get":{"tags":["Auth0 Test","Auth0 Test"],"summary":"Protected Endpoint","description":"Protected endpoint that requires a valid Auth0 token","operationId":"protected_endpoint_api_auth0_test_protected_get","responses":{"200":{"description":"Successful Response","content":{"application/json":{"schema":{}}}}},"security":[{"Bearer":[]}]}},"/api/auth0-test/metadata":{"get":{"tags":["Auth0 Test","Auth0 Test"],"summary":"Auth0 Metadata","description":"Get Auth0 metadata for debugging","operationId":"auth0_metadata_api_auth0_test_metadata_get","responses":{"200":{"description":"Successful Response","content":{"application/json":{"schema":{}}}}}}},"/api/me":{"get":{"tags":["Auth"],"summary":"Get Current User","operationId":"get_current_user_api_me_get","responses":{"200":{"description":"Successful Response","content":{"application/json":{"schema":{}}}}},"security":[{"HTTPBearer":[]}]}},"/":{"get":{"tags":["Root"],"summary":"Read Root","operationId":"read_root__get","responses":{"200":{"description":"Successful Response","content":{"application/json":{"schema":{}}}}}}},"/health":{"get":{"tags":["Health"],"summary":"Health","operationId":"health_health_get","responses":{"200":{"description":"Successful Response","content":{"application/json":{"schema":{}}}}}}}},"components":{"schemas":{"Body_upload_my_profile_picture_api_profiles_me_picture_post":{"properties":{"file":{"type":"string","format":"binary","title":"File"}},"type":"object","required":["file"],"title":"Body_upload_my_profile_picture_api_profiles_me_picture_post"},"Body_upload_profile_image_api_users__user_id__profile_image_post":{"properties":{"file":{"type":"string","format":"binary","title":"File"}},"type":"object","required":["file"],"title":"Body_upload_profile_image_api_users__user_id__profile_image_post"},"ConnectionCreate":{"properties":{"target_user_id":{"type":"string","format":"uuid","title":"Target User Id","description":"ID of the user to connect with"},"status":{"$ref":"#/components/schemas/ConnectionStatus","description":"Initial status of the connection","default":"pending"}},"type":"object","required":["target_user_id"],"title":"ConnectionCreate","description":"Schema for creating a new connection","example":{"status":"pending","target_user_id":"87654321-4321-8765-4321-876543210987"}},"ConnectionDTO":{"properties":{"id":{"type":"string","format":"uuid","title":"Id","description":"Unique connection identifier"},"user_id":{"type":"string","format":"uuid","title":"User Id","description":"ID of the user who initiated the connection"},"target_user_id":{"type":"string","format":"uuid","title":"Target User Id","description":"ID of the user being connected to"},"status":{"$ref":"#/components/schemas/ConnectionStatus","description":"Connection status"},"created_at":{"type":"string","format":"date-time","title":"Created At","description":"Connection creation timestamp"},"updated_at":{"type":"string","format":"date-time","title":"Updated At","description":"Last update timestamp"}},"type":"object","required":["user_id","target_user_id","status"],"title":"ConnectionDTO","description":"Data Transfer Object for connection information","example":{"created_at":"2022-01-01T12:00:00","id":"12345678-1234-5678-1234-567812345678","status":"pending","target_user_id":"87654321-4321-8765-4321-876543210987","updated_at":"2022-01-01T12:00:00","user_id":"12345678-1234-5678-1234-567812345678"}},"ConnectionStatus":{"type":"string","enum":["pending","accepted","rejected","blocked"],"title":"ConnectionStatus","description":"Enum for connection status values"},"EventCreate":{"properties":{"title":{"type":"string","maxLength":100,"title":"Title","description":"Event title"},"description":{"anyOf":[{"type":"string","maxLength":500},{"type":"null"}],"title":"Description","description":"Event description"},"start_time":{"type":"string","format":"date-time","title":"Start Time","description":"Event start time"},"end_time":{"type":"string","format":"date-time","title":"End Time","description":"Event end time"},"location":{"anyOf":[{"type":"string","maxLength":200},{"type":"null"}],"title":"Location","description":"Event location"},"is_virtual":{"type":"boolean","title":"Is Virtual","description":"Whether the event is virtual","default":false},"meeting_url":{"anyOf":[{"type":"string","maxLength":2083,"minLength":1,"format":"uri"},{"type":"null"}],"title":"Meeting Url","description":"Meeting URL for virtual events"},"capacity":{"anyOf":[{"type":"integer","minimum":1.0},{"type":"null"}],"title":"Capacity","description":"Maximum number of attendees"},"is_active":{"type":"boolean","title":"Is Active","description":"Whether the event is active","default":true}},"type":"object","required":["title","start_time","end_time"],"title":"EventCreate","description":"Schema for creating a new event"},"HTTPValidationError":{"properties":{"detail":{"items":{"$ref":"#/components/schemas/ValidationError"},"type":"array","title":"Detail"}},"type":"object","title":"HTTPValidationError"},"MemberDTO":{"properties":{"id":{"type":"string","format":"uuid","title":"Id","description":"Unique member identifier"},"user_id":{"type":"string","format":"uuid","title":"User Id","description":"ID of the user"},"first_name":{"type":"string","maxLength":50,"title":"First Name","description":"Member's first name"},"last_name":{"type":"string","maxLength":50,"title":"Last Name","description":"Member's last name"},"email":{"type":"string","format":"email","title":"Email","description":"Member's email address"},"phone":{"anyOf":[{"type":"string"},{"type":"null"}],"title":"Phone","description":"Member's phone number"},"date_of_birth":{"anyOf":[{"type":"string","format":"date"},{"type":"null"}],"title":"Date Of Birth","description":"Member's date of birth"},"address":{"anyOf":[{"type":"string"},{"type":"null"}],"title":"Address","description":"Member's address"},"city":{"anyOf":[{"type":"string"},{"type":"null"}],"title":"City","description":"Member's city"},"state":{"anyOf":[{"type":"string"},{"type":"null"}],"title":"State","description":"Member's state/province"},"postal_code":{"anyOf":[{"type":"string"},{"type":"null"}],"title":"Postal Code","description":"Member's postal/zip code"},"country":{"anyOf":[{"type":"string"},{"type":"null"}],"title":"Country","description":"Member's country"},"is_active":{"type":"boolean","title":"Is Active","description":"Whether the member is active","default":true},"created_at":{"type":"string","format":"date-time","title":"Created At","description":"Member creation timestamp"},"updated_at":{"type":"string","format":"date-time","title":"Updated At","description":"Last update timestamp"}},"type":"object","required":["user_id","first_name","last_name","email"],"title":"MemberDTO","description":"Data Transfer Object for member information"},"MessageDTO":{"properties":{"id":{"type":"string","format":"uuid","title":"Id","description":"Unique message identifier"},"sender_id":{"type":"string","title":"Sender Id","description":"ID of the message sender"},"recipient_id":{"type":"string","title":"Recipient Id","description":"ID of the message recipient"},"content":{"type":"string","title":"Content","description":"Message content"},"created_at":{"type":"string","format":"date-time","title":"Created At","description":"Message creation timestamp"},"is_read":{"type":"boolean","title":"Is Read","description":"Whether the message has been read","default":false}},"type":"object","required":["sender_id","recipient_id","content"],"title":"MessageDTO","description":"Data Transfer Object for chat messages","example":{"content":"Hello, how are you?","created_at":"2022-01-01T12:00:00","id":"12345678-1234-5678-1234-567812345678","is_read":false,"recipient_id":"87654321-4321-8765-4321-876543210987","sender_id":"12345678-1234-5678-1234-567812345678"}},"MessageRequest":{"properties":{"sender_id":{"anyOf":[{"type":"string"},{"type":"null"}],"title":"Sender Id","description":"ID of the message sender (optional, will be set to current user if not provided)"},"recipient_id":{"type":"string","title":"Recipient Id","description":"ID of the message recipient"},"content":{"type":"string","title":"Content","description":"Message content"},"timestamp":{"anyOf":[{"type":"string","format":"date-time"},{"type":"null"}],"title":"Timestamp","description":"Message timestamp"},"metadata":{"anyOf":[{"additionalProperties":true,"type":"object"},{"type":"null"}],"title":"Metadata","description":"Additional message metadata"}},"type":"object","required":["recipient_id","content"],"title":"MessageRequest","description":"Schema for sending a chat message","example":{"content":"your_content","metadata":{},"recipient_id":"your_recipient_id","sender_id":"your_sender_id","timestamp":"2022-01-01T12:00:00"}},"NotificationDTO":{"additionalProperties":true,"type":"object"},"ProfileCreate":{"properties":{"bio":{"anyOf":[{"type":"string","maxLength":500},{"type":"null"}],"title":"Bio","description":"User's biography"},"location":{"anyOf":[{"type":"string","maxLength":100},{"type":"null"}],"title":"Location","description":"User's location"},"website":{"anyOf":[{"type":"string","maxLength":2083,"minLength":1,"format":"uri"},{"type":"null"}],"title":"Website","description":"User's website URL"},"birth_date":{"anyOf":[{"type":"string","format":"date"},{"type":"null"}],"title":"Birth Date","description":"User's date of birth"},"gender":{"anyOf":[{"type":"string","maxLength":50},{"type":"null"}],"title":"Gender","description":"User's gender"},"profile_picture_url":{"anyOf":[{"type":"string","maxLength":2083,"minLength":1,"format":"uri"},{"type":"null"}],"title":"Profile Picture Url","description":"URL to the user's profile picture"},"cover_photo_url":{"anyOf":[{"type":"string","maxLength":2083,"minLength":1,"format":"uri"},{"type":"null"}],"title":"Cover Photo Url","description":"URL to the user's cover photo"},"phone_number":{"anyOf":[{"type":"string","maxLength":20},{"type":"null"}],"title":"Phone Number","description":"User's phone number"},"preferred_language":{"anyOf":[{"type":"string","maxLength":10},{"type":"null"}],"title":"Preferred Language","description":"User's preferred language code","default":"en"},"timezone":{"anyOf":[{"type":"string"},{"type":"null"}],"title":"Timezone","description":"User's timezone","default":"UTC"},"user_id":{"type":"string","format":"uuid","title":"User Id","description":"ID of the user this profile belongs to"}},"type":"object","required":["user_id"],"title":"ProfileCreate","description":"Schema for creating a new profile"},"ProfileResponse":{"additionalProperties":true,"type":"object"},"ProfileUpdate":{"properties":{"bio":{"anyOf":[{"type":"string","maxLength":500},{"type":"null"}],"title":"Bio","description":"User's biography"},"location":{"anyOf":[{"type":"string","maxLength":100},{"type":"null"}],"title":"Location","description":"User's location"},"website":{"anyOf":[{"type":"string","maxLength":2083,"minLength":1,"format":"uri"},{"type":"null"}],"title":"Website","description":"User's website URL"},"birth_date":{"anyOf":[{"type":"string","format":"date"},{"type":"null"}],"title":"Birth Date","description":"User's date of birth"},"gender":{"anyOf":[{"type":"string","maxLength":50},{"type":"null"}],"title":"Gender","description":"User's gender"},"profile_picture_url":{"anyOf":[{"type":"string","maxLength":2083,"minLength":1,"format":"uri"},{"type":"null"}],"title":"Profile Picture Url","description":"URL to the user's profile picture"},"cover_photo_url":{"anyOf":[{"type":"string","maxLength":2083,"minLength":1,"format":"uri"},{"type":"null"}],"title":"Cover Photo Url","description":"URL to the user's cover photo"},"phone_number":{"anyOf":[{"type":"string","maxLength":20},{"type":"null"}],"title":"Phone Number","description":"User's phone number"},"preferred_language":{"anyOf":[{"type":"string","maxLength":10},{"type":"null"}],"title":"Preferred Language","description":"User's preferred language code","default":"en"},"timezone":{"anyOf":[{"type":"string"},{"type":"null"}],"title":"Timezone","description":"User's timezone","default":"UTC"}},"type":"object","title":"ProfileUpdate","description":"Schema for updating an existing profile"},"TokenResponse":{"properties":{"access_token":{"type":"string","title":"Access Token","description":"JWT access token"},"refresh_token":{"anyOf":[{"type":"string"},{"type":"null"}],"title":"Refresh Token","description":"JWT refresh token"},"expires_in":{"type":"integer","title":"Expires In","description":"Token expiration time in seconds"},"token_type":{"type":"string","title":"Token Type","description":"Type of token","default":"Bearer"},"uniqueId":{"anyOf":[{"type":"string"},{"type":"null"}],"title":"Uniqueid","description":"User's unique identifier from the identity provider"}},"type":"object","required":["access_token","expires_in"],"title":"TokenResponse","description":"JWT token response model"},"User":{"additionalProperties":true,"type":"object"},"UserCreate":{"properties":{"email":{"type":"string","format":"email","title":"Email","description":"User's email address"},"first_name":{"anyOf":[{"type":"string","maxLength":50},{"type":"null"}],"title":"First Name","description":"User's first name"},"last_name":{"anyOf":[{"type":"string","maxLength":50},{"type":"null"}],"title":"Last Name","description":"User's last name"},"is_active":{"type":"boolean","title":"Is Active","description":"Whether the user account is active","default":true},"is_verified":{"type":"boolean","title":"Is Verified","description":"Whether the user's email is verified","default":false},"role":{"type":"string","title":"Role","description":"User role (e.g., 'user', 'admin')","default":"user"},"password":{"type":"string","minLength":8,"title":"Password","description":"User's password (min 8 characters)"}},"type":"object","required":["email","password"],"title":"UserCreate","description":"Schema for creating a new user","example":{"email":"your_email","first_name":"your_first_name","is_active":true,"is_verified":false,"last_name":"your_last_name","role":"user"}},"UserCred":{"properties":{"username":{"type":"string","title":"Username","description":"User's email or username"},"password":{"type":"string","minLength":8,"title":"Password","description":"User's password"}},"type":"object","required":["username","password"],"title":"UserCred","description":"User credentials for authentication"},"UserDeviceDTO":{"properties":{"id":{"type":"string","format":"uuid","title":"Id","description":"Unique device identifier"},"user_id":{"type":"string","format":"uuid","title":"User Id","description":"ID of the user who owns this device"},"device_id":{"type":"string","title":"Device Id","description":"Unique device identifier (e.g., Firebase token)"},"device_type":{"type":"string","title":"Device Type","description":"Type of device (e.g., 'ios', 'android', 'web')"},"device_name":{"anyOf":[{"type":"string"},{"type":"null"}],"title":"Device Name","description":"Human-readable device name"},"os_version":{"anyOf":[{"type":"string"},{"type":"null"}],"title":"Os Version","description":"Operating system version"},"app_version":{"anyOf":[{"type":"string"},{"type":"null"}],"title":"App Version","description":"Application version"},"last_used":{"type":"string","format":"date-time","title":"Last Used","description":"Last time the device was used"},"created_at":{"type":"string","format":"date-time","title":"Created At","description":"Device registration timestamp"},"is_active":{"type":"boolean","title":"Is Active","description":"Whether the device is active","default":true}},"type":"object","required":["user_id","device_id","device_type"],"title":"UserDeviceDTO","description":"Data Transfer Object for user device information","example":{"app_version":"1.0.0","created_at":"2022-01-01T12:00:00","device_id":"your_device_id","device_name":"your_device_name","device_type":"ios","id":"your_device_id","is_active":true,"last_used":"2022-01-01T12:00:00","os_version":"15.4","user_id":"your_user_id"}},"UserMemberDto":{"properties":{"email":{"type":"string","format":"email","title":"Email","description":"User's email address"},"first_name":{"type":"string","maxLength":50,"title":"First Name","description":"User's first name"},"last_name":{"type":"string","maxLength":50,"title":"Last Name","description":"User's last name"},"phone":{"anyOf":[{"type":"string"},{"type":"null"}],"title":"Phone","description":"User's phone number"},"role":{"type":"string","title":"Role","description":"User's role in the system","default":"member"},"send_invite":{"type":"boolean","title":"Send Invite","description":"Whether to send an invitation email","default":true},"additional_data":{"anyOf":[{"additionalProperties":true,"type":"object"},{"type":"null"}],"title":"Additional Data","description":"Additional member data"}},"type":"object","required":["email","first_name","last_name"],"title":"UserMemberDto","description":"Data Transfer Object for user member information","example":{"additional_data":{},"email":"your_email","first_name":"your_first_name","last_name":"your_last_name","phone":"your_phone","role":"member","send_invite":true}},"UserUpdate":{"properties":{"email":{"anyOf":[{"type":"string","format":"email"},{"type":"null"}],"title":"Email"},"first_name":{"anyOf":[{"type":"string"},{"type":"null"}],"title":"First Name"},"last_name":{"anyOf":[{"type":"string"},{"type":"null"}],"title":"Last Name"},"is_active":{"anyOf":[{"type":"boolean"},{"type":"null"}],"title":"Is Active"},"is_verified":{"anyOf":[{"type":"boolean"},{"type":"null"}],"title":"Is Verified"},"role":{"anyOf":[{"type":"string"},{"type":"null"}],"title":"Role"},"password":{"anyOf":[{"type":"string","minLength":8},{"type":"null"}],"title":"Password","description":"New password (min 8 characters)"}},"type":"object","title":"UserUpdate","description":"Schema for updating an existing user"},"ValidationError":{"properties":{"loc":{"items":{"anyOf":[{"type":"string"},{"type":"integer"}]},"type":"array","title":"Location"},"msg":{"type":"string","title":"Message"},"type":{"type":"string","title":"Error Type"}},"type":"object","required":["loc","msg","type"],"title":"ValidationError"}},"securitySchemes":{"OAuth2PasswordBearer":{"type":"oauth2","flows":{"password":{"scopes":{},"tokenUrl":"/auth/login"}}},"HTTPBearer":{"type":"http","scheme":"bearer"},"Bearer":{"type":"http","scheme":"bearer"}}},"tags":[{"name":"Auth","description":"Authentication related routes"},{"name":"Chat","description":"Chat services"},{"name":"Connections","description":"Connections between users"},{"name":"Events","description":"Event management"},{"name":"Health","description":"Health checks"},{"name":"Members","description":"Member-related operations"},{"name":"Notification","description":"Email/OTP notifications"},{"name":"Profiles","description":"User profile management"},{"name":"Root","description":"API root"},{"name":"Users","description":"User registration and updates"}]}
+
+HTTP Status: 200
+Time: 0.002785s
+
+==========================================
+
+[0;32m[SUCCESS][0m API testing completed!
+[1;33m[WARNING][0m Remember to:
+[1;33m[WARNING][0m 1. Start the FastAPI server before running this script
+[1;33m[WARNING][0m 2. Update the SAMPLE_JWT_TOKEN with a real token after successful login
+[1;33m[WARNING][0m 3. Create test_image.jpg file for file upload tests
+[1;33m[WARNING][0m 4. Update sample UUIDs with real ones from your database
+[1;33m[WARNING][0m 5. Adjust the BASE_URL if your server runs on a different port
+
+[0;34m[INFO][0m To run this script:
+[0;34m[INFO][0m 1. Make it executable: chmod +x test_api_endpoints.sh
+[0;34m[INFO][0m 2. Run it: ./test_api_endpoints.sh
+[0;34m[INFO][0m 3. Or run specific sections by copying individual curl commands

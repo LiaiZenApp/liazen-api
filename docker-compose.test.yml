@@ -1,0 +1,71 @@
+# Docker Compose for testing environment
+version: "3.9"
+
+services:
+  api-test:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    environment:
+      - DATABASE_URL=postgresql://test_user:test_password@test-db:5432/test_liaizen
+      - DEBUG=true
+      - LOG_LEVEL=DEBUG
+      - AUTH0_DOMAIN=test-domain.auth0.com
+      - AUTH0_AUDIENCE=test-audience
+      - JWT_SECRET_KEY=test-secret-key
+    volumes:
+      - ./app:/app/app
+      - ./tests:/app/tests
+      - ./test-uploads:/app/uploads
+    depends_on:
+      test-db:
+        condition: service_healthy
+    command: >
+      sh -c "
+        echo 'Waiting for database...' &&
+        sleep 5 &&
+        echo 'Running tests...' &&
+        pytest tests/ -v --cov=app --cov-report=html --cov-report=term
+      "
+    networks:
+      - test-network
+
+  test-db:
+    image: postgres:15-alpine
+    environment:
+      POSTGRES_DB: test_liaizen
+      POSTGRES_USER: test_user
+      POSTGRES_PASSWORD: test_password
+      POSTGRES_INITDB_ARGS: "--encoding=UTF-8 --lc-collate=C --lc-ctype=C"
+    volumes:
+      - test_postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U test_user -d test_liaizen"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+      start_period: 10s
+    networks:
+      - test-network
+
+  test-redis:
+    image: redis:7-alpine
+    volumes:
+      - test_redis_data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+    networks:
+      - test-network
+
+volumes:
+  test_postgres_data:
+    driver: local
+  test_redis_data:
+    driver: local
+
+networks:
+  test-network:
+    driver: bridge

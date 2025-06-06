@@ -1,0 +1,60 @@
+.
+├── app
+│   ├── api
+│   │   ├── __init__.py
+│   │   ├── auth.py
+│   │   ├── auth0_test.py
+│   │   ├── chat.py
+│   │   ├── connections.py
+│   │   ├── events.py
+│   │   ├── members.py
+│   │   ├── notification.py
+│   │   ├── profile.py
+│   │   ├── schemas.py
+│   │   └── users.py
+│   ├── common
+│   │   └── responses.py
+│   ├── core
+│   │   ├── __init__.py
+│   │   ├── config.py
+│   │   ├── logging_config.py
+│   │   ├── rate_limiter.py
+│   │   └── security.py
+│   ├── db
+│   │   ├── __init__.py
+│   │   └── base.py
+│   ├── main.py
+│   ├── models
+│   │   ├── __init__.py
+│   │   └── schemas.py
+│   └── services
+│       ├── __init__.py
+│       ├── auth_service.py
+│       ├── chat_service.py
+│       ├── connection_service.py
+│       ├── event_service.py
+│       ├── member_service.py
+│       ├── notification_service.py
+│       ├── profile_service.py
+│       └── user_service.py
+├── AUTH0_INTEGRATION.md
+├── docker-compose.yml
+├── Dockerfile
+├── FastAPI-Scaffolding.txt
+├── profile_images
+├── pytest.ini
+├── requirements.txt
+├── scripts
+│   └── test_auth0_integration.py
+├── test.db
+└── tests
+    ├── __init__.py
+    ├── conftest.py
+    ├── README.md
+    ├── test_app.py
+    ├── test_auth.py
+    ├── test_auth0.py
+    ├── test_config.py
+    ├── test_profile_api.py
+    ├── test_rate_limiter.py
+    └── test_schemas.py

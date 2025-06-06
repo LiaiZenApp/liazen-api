@@ -1,0 +1,63 @@
+# Multi-stage Docker build for production
+# Stage 1: Build dependencies and compile Python packages
+FROM python:3.11-slim as builder
+
+# Set environment variables for Python
+ENV PYTHONDONTWRITEBYTECODE=1 \
+    PYTHONUNBUFFERED=1 \
+    PIP_NO_CACHE_DIR=1 \
+    PIP_DISABLE_PIP_VERSION_CHECK=1 \
+    PYTHONPATH=/app \
+    LOG_LEVEL=INFO \
+    LOG_FORMAT="%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+
+# Install system dependencies, create virtual environment, and install Python packages
+COPY requirements.txt .
+RUN apt-get update && apt-get install -y \
+    build-essential \
+    libpq-dev \
+    gcc \
+    && rm -rf /var/lib/apt/lists/* \
+    && python -m venv /opt/venv \
+    && /opt/venv/bin/pip install --no-cache-dir -r requirements.txt
+
+ENV PATH="/opt/venv/bin:$PATH"
+
+# Stage 2: Production runtime
+FROM python:3.11-slim as production
+
+# Set environment variables
+ENV PYTHONDONTWRITEBYTECODE=1 \
+    PYTHONUNBUFFERED=1 \
+    PATH="/opt/venv/bin:$PATH" \
+    PYTHONPATH=/app \
+    LOG_LEVEL=INFO \
+    LOG_FORMAT="%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+
+# Install runtime dependencies, create user, setup directories, and copy files
+WORKDIR /app
+COPY --from=builder /opt/venv /opt/venv
+COPY --chown=root:root app/ ./app/
+COPY --chown=root:root scripts/ ./scripts/
+COPY --chown=root:root pytest.ini ./
+RUN apt-get update && apt-get install -y \
+    libpq5 \
+    curl \
+    && rm -rf /var/lib/apt/lists/* \
+    && apt-get clean \
+    && groupadd -r appuser && useradd -r -g appuser appuser \
+    && mkdir -p uploads profile_images logs \
+    && chown -R appuser:appuser /app
+
+# Switch to non-root user
+USER appuser
+
+# Health check
+HEALTHCHECK --interval=30s --timeout=30s --start-period=5s --retries=3 \
+    CMD curl -f http://localhost:8000/health || exit 1
+
+# Expose port
+EXPOSE 8000
+
+# Use exec form for proper signal handling with logging
+CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000", "--workers", "4", "--log-level", "info", "--access-log"]
