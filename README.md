@@ -15,8 +15,8 @@ A FastAPI application for iOS/Android apps with Auth0 authentication, PostgreSQL
 
 1. **Clone the repository**
    ```bash
-   git clone <repository-url>
-   cd gen_fastAPI-v2
+   git clone https://github.com/LiaiZenApp/liaizen-api.git
+   cd liazen-api
    ```
 
 2. **Create environment file**
